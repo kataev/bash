@@ -12,13 +12,13 @@
     <script src="/static/js/libs/backbone.js"></script>
 
     <!-- Application -->
-{#    <script src="/static/js/index.js"></script>#}
-{#    <script src="/static/js/modules/quotes.js"></script>#}
+    <script src="/static/js/index.js"></script>
+    <script src="/static/js/modules/quotes.js"></script>
 
 
-{#    <script src="/static/js/bootstrap/bootstrap-modal.js"></script>#}
+    <script src="/static/js/bootstrap/bootstrap-modal.js"></script>
 
-{#    <script src="/quote?callback=collection"></script>#}
+    <script src="/quote?callback=collection"></script>
 
 
     <!-- Le styles -->
@@ -35,9 +35,18 @@
             <a class="brand" href="#">Bash.Twitterach</a>
             <ul class="nav">
                 <li class="active"><a href="#">Домой</a></li>
-                <li><a href="#about">О нас</a></li>
-                <li><a href="#add">Добавить</a></li>
-                <li><a href="{% url socialauth_begin 'twitter' %}">Enter using Twitter</a></li>
+{#                <li><a href="#about">О нас</a></li>#}
+{#                <li><a href="#add">Добавить</a></li>#}
+                <li><a data-bypass href="{% url socialauth_begin 'twitter' %}">Enter using Twitter</a></li>
+                {% if social_auth.associated %}
+                        {% for type, accounts in social_auth.associated.items %}
+                            {% for account in accounts %}
+                                <li>
+                                    <span class="disconnect"><a data-bypass href={% url socialauth_disconnect_individual account.provider account.id %}>{{ account.provider|title }} (ID {{ account.id }})</a></span>
+                                </li>
+                            {% endfor %}
+                        {% endfor %}
+                {% endif %}
             </ul>
             {% block content %}
             {% endblock %}
