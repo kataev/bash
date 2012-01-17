@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>WHS</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Libraries -->
+    <script src="/static/js/libs/jquery.js"></script>
+    <script src="/static/js/libs/underscore.js"></script>
+    <script src="/static/js/libs/backbone.js"></script>
+
+    <!-- Application -->
+{#    <script src="/static/js/index.js"></script>#}
+{#    <script src="/static/js/modules/quotes.js"></script>#}
+
+
+{#    <script src="/static/js/bootstrap/bootstrap-modal.js"></script>#}
+
+{#    <script src="/quote?callback=collection"></script>#}
+
+
+    <!-- Le styles -->
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="topbar">
+    <div class="fill">
+        <div class="container">
+            <a class="brand" href="#">Bash.Twitterach</a>
+            <ul class="nav">
+                <li class="active"><a href="#">Домой</a></li>
+                <li><a href="#about">О нас</a></li>
+                <li><a href="#add">Добавить</a></li>
+                <li><a href="{% url socialauth_begin 'twitter' %}">Enter using Twitter</a></li>
+            </ul>
+            {% block content %}
+            {% endblock %}
+            <form action="" class="pull-right">
+                <input class="input-small" type="text" placeholder="Username">
+                <input class="input-small" type="password" placeholder="Password">
+                <button class="btn" type="submit">Sign in</button>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<div class="container">
+
+    <div class="content" id="main">
+        <div id="test" class="modal hide fade">
+            <div class="modal-header">
+                <a href="#" class="close">&times;</a>
+                <h3>Modal Heading</h3>
+            </div>
+            <div class="modal-body">
+                <p>One fine body…</p>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn primary">Primary</a>
+                <a href="#" class="btn secondary">Secondary</a>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; Company 2012</p>
+    </footer>
+
+</div>
+<!-- /container -->
+
+</body>
+</html>
