@@ -35,30 +35,38 @@
         quote:function (id) {
             console.log('quote', id)
         },
-        add:function(){
+        add:function () {
             console.log('add')
             v = new Quotes.Views.Add
             v.render()
         },
-        index:function(){
-            Quotes.quotes.each(function(q){
-                v = new Quotes.Views.Quote({model:q})
-                    v.render()
-                    $(v.el).appendTo('#main')
-            })
+        index:function () {
+            var v = new Quotes.Views.Quote({collection:Quotes.quotes,el:$('#main')})
+            v.render()
         }
     });
 
     Quotes.Views.Quote = Backbone.View.extend({
+        initialize:function(){
+            this.collection.view = this
+            this.collection.bind('add',this.add,this)
+        },
         template:"/static/js/templates/quote.html",
         tagName:'div',
         className:'quote',
-        render: function(){
+        render:function () {
+            console.log('render')
+            $(this.el).empty()
             namespace.fetchTemplate(this.template, function (tmpl) {
-                $(this.el).html(tmpl(this.model.toJSON()));
-            },this);
-        }
+                this.collection.each(this.add,this)
+            }, this);
+        },
+        add:function(quote){
+            namespace.fetchTemplate(this.template, function (tmpl) {
+                $(this.el).prepend(tmpl(quote.toJSON()));
+            }, this);
 
+        }
     })
 
 
@@ -73,18 +81,18 @@
             // Fetch the template, render it to the View element and call done.
             namespace.fetchTemplate(this.template, function (tmpl) {
                 $(this.el).html(tmpl());
-                $(this.el).modal({show:true,backdrop:true})
+                $(this.el).modal({show:true, backdrop:true})
                 $(this.el).bind('hidden', $.proxy(function () {
                     this.remove();
-                },this))
-            },this);
+                }, this))
+            }, this);
         },
-        add:function(){
+        add:function () {
             var text = this.$('textarea').val();
             quote = Quotes.quotes.create({text:text});
 //            quote.save()
             $(this.el).modal('hide')
-            Backbone.history.navigate(quote.url(), true);
+            Backbone.history.navigate('', true);
         }
     });
     // This will fetch the tutorial template and render it.

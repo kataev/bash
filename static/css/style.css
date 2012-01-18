@@ -47,3 +47,12 @@ body {
 .topbar .btn {
     border: 0;
 }
+
+
+.pagination.center,
+.pagination.center ul {
+    float: left;
+    position: relative;
+}
+.pagination.center { left: 50%; }
+.pagination.center ul { left: -50%; }
