@@ -72,7 +72,13 @@ jQuery(function ($) {
     app.router = new Router();
 
     // Trigger the initial route and enable HTML5 History API support
-    Backbone.history.start({ pushState:false });
+    Backbone.history.start({ pushState:true });
+    console.log(window.location.href.split('page/')[1])
+    app.Collection = new Paginated.Collection({baseUrl:'/quotes',model:Quotes.Model,page:window.location.href.split('page/')[1]});
+    app.Collection.fetch({silent: true})
+
+    app.View = new Paginated.Views.View({collection:app.Collection,el:$('#navigation')});
+//    app.View.render()
 
     // All navigation that is relative should be passed through the navigate
     // method, to be processed by the router.  If the link has a data-bypass
@@ -92,6 +98,7 @@ jQuery(function ($) {
             // that may be placed in modules.  To have this work globally (at the
             // cost of losing all route events) you can change the following line
             // to: Backbone.history.navigate(href, true);
+            console.log(href)
             app.router.navigate(href, true);
         }
     });

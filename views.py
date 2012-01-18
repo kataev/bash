@@ -5,10 +5,10 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render,redirect
 from quotes.models import *
 
-def home(request):
-    paginator = Paginator(Quote.objects.all(), 5) # Show 25 contacts per page
-
-    page = request.GET.get('page',1)
+def home(request,page=1):
+    paginator = Paginator(Quote.objects.all(), 7)
+#    page = int(page)
+#    page = request.GET.get('page',1)
     try:
         quotes = paginator.page(page)
     except PageNotAnInteger:

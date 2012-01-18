@@ -8,12 +8,13 @@
 
     <!-- Libraries -->
     <script src="/static/js/libs/jquery.js"></script>
-    {#    <script src="/static/js/libs/underscore.js"></script>#}
-    {#    <script src="/static/js/libs/backbone.js"></script>#}
+        <script src="/static/js/libs/underscore.js"></script>
+        <script src="/static/js/libs/backbone.js"></script>
 
     <!-- Application -->
-    {#    <script src="/static/js/index.js"></script>#}
-    {#    <script src="/static/js/modules/quotes.js"></script>#}
+        <script src="/static/js/index.js"></script>
+        <script src="/static/js/modules/quotes.js"></script>
+        <script src="/static/js/modules/paginated.js"></script>
 
 
     <script src="/static/js/bootstrap/bootstrap-modal.js"></script>
@@ -63,10 +64,9 @@
 
 <div class="container">
     <div class='hide modal' id="add-modal">
-        <form style='margin: 0' action="/add" method="POST">
+        <form style='margin: 0' action="#add" method="POST">
             <div class="modal-header">
                 <a href="#" class="close">&times;</a>
-
                 <h3>Добавить цитату</h3>
             </div>
             <div class="modal-body">
@@ -79,33 +79,40 @@
         </form>
     </div>
 
-
     <div class="content" id="main">
         {% for quote in quotes.object_list %}
-            <div class='row' style='height: 40px;'>
+            <div data-quote-id='{{ quote.pk }}' class='row quote'>
+                <img src="http://a0.twimg.com/profile_images/1701669480/100_PBS_10_010_normal.png">
                 <div data-user-id='{{ quote.author.social_auth.get.uid }}' class='span2'>
-                    {{ quote.author.username }}
+                    <p class='username'>{{ quote.author.username }}</p>
+                    <p class='id'><a href='/quote/<%= id %>'>#{{ quote.pk }}</a></p>
                 </div>
-                <div class="span8">
-                    {{ quote.text }}
+                <div class="span7 text">{{ quote.text }}
+                </div>
+                <div class="row">
+                    <div class="voting span1">
+                        <button class="label success">+</button>
+                        <button class="label danger">-</button>
+                    </div>
+                    <div class="span2">
+                        Тут еще что нить
+                    </div>
                 </div>
             </div>
         {% endfor %}
-
-
     </div>
     <footer style="margin: 0;padding: 0">
         <div class="pagination center">
-            <ul>
+            <ul id='navigation'>
                 {% if quotes.has_previous %}
-                    <li class="prev"><a href="?page={{ quotes.previous_page_number }}">&larr; Предыдущая</a></li>
+                    <li class="prev"><a href="/page/{{ quotes.previous_page_number }}">&larr; Предыдущая</a></li>
                 {% else %}
                     <li class="prev disabled"><a>&larr; Предыдущая</a></li>
                 {% endif %}
 
-                <li class="active"><a>Страница {{ quotes.number }} из {{ quotes.paginator.num_pages }}.</a></li>
+                <li class="active"><a>Страница {{ quotes.number }} из {{ quotes.paginator.num_pages }}</a></li>
                 {% if quotes.has_next %}
-                    <li class="next"><a href="?page={{ quotes.next_page_number }}">Следующая &rarr;</a></li>
+                    <li class="next"><a href="/page/{{ quotes.next_page_number }}">Следующая &rarr;</a></li>
                 {% else %}
                     <li class="next disabled"><a>Следующая &rarr;</a></li>
                 {% endif %}
@@ -113,9 +120,6 @@
         </div>
         <p style='clear: both;'>&copy; Company 2012</p>
     </footer>
-
 </div>
-<!-- /container -->
-
 </body>
 </html>

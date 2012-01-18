@@ -18,19 +18,13 @@
     Quotes.Model = Backbone.Model.extend({
         urlRoot:'/quote'
     });
-    Quotes.Collection = Backbone.Collection.extend({
-        model:Quotes.Model,
-        url:'/quote'
-    });
-
-    Quotes.quotes = new Quotes.Collection;
-
 
     Quotes.Router = Backbone.Router.extend({
         routes:{
             "quote/:id":"quote",
             "add":"add",
-            '':'index'
+            '':'index',
+            'page/:page':'page'
         },
         quote:function (id) {
             console.log('quote', id)
@@ -41,34 +35,25 @@
             v.render()
         },
         index:function () {
-            var v = new Quotes.Views.Quote({collection:Quotes.quotes,el:$('#main')})
-            v.render()
+//            var v = new Quotes.Views.Quote({collection:Quotes.quotes,el:$('#main')})
+//            v.render()
+        },
+        page:function(page){
+
         }
     });
 
     Quotes.Views.Quote = Backbone.View.extend({
-        initialize:function(){
-            this.collection.view = this
-            this.collection.bind('add',this.add,this)
-        },
         template:"/static/js/templates/quote.html",
         tagName:'div',
-        className:'quote',
-        render:function () {
-            console.log('render')
-            $(this.el).empty()
+        className:'quote row',
+        render: function(){
             namespace.fetchTemplate(this.template, function (tmpl) {
-                this.collection.each(this.add,this)
-            }, this);
-        },
-        add:function(quote){
-            namespace.fetchTemplate(this.template, function (tmpl) {
-                $(this.el).prepend(tmpl(quote.toJSON()));
-            }, this);
-
+                $(this.el).html(tmpl(this.model.toJSON()));
+            },this);
         }
-    })
 
+    })
 
     Quotes.Views.Add = Backbone.View.extend({
         template:"/static/js/templates/add.html",

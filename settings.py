@@ -125,7 +125,8 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'social_auth',
 #    'app'
-#    'bash.quotes',
+    'api',
+    'bash.quotes',
 #    'piston',
 
 )
