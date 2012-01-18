@@ -10,7 +10,9 @@ class Quote(models.Model):
     class Meta:
         ordering = ('-id',)
 
+votes = ((True,'plus'),(False,'minus'))
+
 class Vote(models.Model):
     user = models.ForeignKey(User,verbose_name=u'Голосующий')
-    vote = models.BooleanField(u'Плюс или минус')
+    vote = models.BooleanField(u'Плюс или минус',choices=votes)
     quote = models.ForeignKey(Quote,verbose_name=u'Цитата')

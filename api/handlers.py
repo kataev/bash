@@ -1,18 +1,22 @@
 # -*- coding: utf-8 -*-
 __author__ = 'bteam'
 from piston.handler import BaseHandler
-from quotes.models import Quote
+from quotes.models import Quote,Vote
 from piston.utils import rc
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.shortcuts import redirect
 
 class QuoteHandler(BaseHandler):
     allowed_methods = ('GET','POST')
     model = Quote
-    fields = ('id', 'text', ('author', ('username', ('social_auth', ('uid',)))))
+    fields = ('id', 'text', 'vote_set', ('author', ('username', ('social_auth', ('uid',)))))
 
     def create(self, request, *args, **kwargs):
         if not self.has_model():
             return rc.NOT_IMPLEMENTED
+
+        if not request.user.is_active():
+            return rc.FORBIDDEN
 
         attrs = self.flatten_dict(request.data)
 
@@ -64,3 +68,45 @@ class QuoteHandler(BaseHandler):
                 page = quotes.number,
                 perPage = perPage
             )
+
+class VoteHandler(BaseHandler):
+    allowed_methods = ('GET','POST')
+    model = Vote
+    fields = ('vote',('user', ('username',)))
+
+    def create(self, request, *args, **kwargs):
+        if not self.has_model():
+            return rc.NOT_IMPLEMENTED
+        if not request.user.is_active:
+            return rc.FORBIDDEN
+
+        try:
+            quote = Quote.objects.get(pk=kwargs.get('id',0))
+        except Quote.DoesNotExist:
+            return rc.NOT_FOUND
+
+        vote = kwargs.get('vote')
+        if vote =='minus': vote = False
+
+        try:
+            self.queryset(request).get(quote=quote,user=request.user)
+            return rc.DUPLICATE_ENTRY
+        except self.model.DoesNotExist:
+
+            print 'olo'
+            inst = self.model(quote=quote,user=request.user,vote=vote)
+            inst.save()
+            return redirect('/quote/%d/votes' % quote.pk)
+        except self.model.MultipleObjectsReturned:
+            return rc.DUPLICATE_ENTRY
+
+    def read(self, request, *args, **kwargs):
+        if not self.has_model():
+            return rc.NOT_IMPLEMENTED
+        try:
+            quote = Quote.objects.get(pk=kwargs.get('id',0))
+        except Quote.DoesNotExist:
+            return rc.NOT_FOUND
+
+        return Vote.objects.filter(quote=quote)
+

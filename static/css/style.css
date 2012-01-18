@@ -8,9 +8,9 @@ body {
 .container > footer p {
     text-align: center; /* center align it with the container */
 }
-.container {
-    width: 840px; /* downsize our container to make the content feel a bit tighter and more cohesive. NOTE: this removes two full columns from the grid, meaning you only go to 14 columns and not 16. */
-}
+/*.container {*/
+    /*width: 840px; *//* downsize our container to make the content feel a bit tighter and more cohesive. NOTE: this removes two full columns from the grid, meaning you only go to 14 columns and not 16. */
+/*}*/
 
 /* The white background content wrapper */
 .content {
@@ -62,6 +62,11 @@ body {
     margin: 10px;
 }
 
+.quote img{
+    height: 50px;
+    width: 50px;
+}
+
 .username {
     vertical-align: top;
 }
@@ -69,5 +74,11 @@ body {
 .quote img {float: left;}
 
 #main {
-    min-height: 500px;
+    min-height: 400px;
 }
+
+.quote p {padding: 0;margin: 0}
+
+p.plus,p.minus {text-decoration: underline;text-align: right}
+p.plus:before { content: 'За:'}
+p.minus:before { content: 'Против:'}

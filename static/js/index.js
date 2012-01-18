@@ -73,9 +73,9 @@ jQuery(function ($) {
 
     // Trigger the initial route and enable HTML5 History API support
     Backbone.history.start({ pushState:true });
-    console.log(window.location.href.split('page/')[1])
+
     app.Collection = new Paginated.Collection({baseUrl:'/quotes',model:Quotes.Model,page:window.location.href.split('page/')[1]});
-    app.Collection.fetch({silent: true})
+    app.Collection.fetch()
 
     app.View = new Paginated.Views.View({collection:app.Collection,el:$('#navigation')});
 //    app.View.render()
