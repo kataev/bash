@@ -53,8 +53,7 @@ class QuoteHandler(BaseHandler):
             except ValueError:
                 return rc.BAD_REQUEST
             if perPage <=0: return rc.BAD_REQUEST
-            paginator = Paginator(self.queryset(request).filter(*args, **kwargs), perPage)
-
+            paginator = Paginator(self.queryset(request).filter(accepted=True,*args, **kwargs), perPage)
 
             try:
                 quotes = paginator.page(page)
@@ -90,7 +89,7 @@ class VoteHandler(BaseHandler):
 
         try:
             self.queryset(request).get(quote=quote,user=request.user)
-            return rc.DUPLICATE_ENTRY
+            return []
         except self.model.DoesNotExist:
 
             print 'olo'

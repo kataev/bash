@@ -94,8 +94,8 @@
 
         template:"/static/js/templates/pagination.html",
         events:{
-            'click .prev a':'previous',
-            'click .next a':'next'
+            'click .prev:not(.disabled) a':'previous',
+            'click .next:not(.disabled) a':'next'
         },
         render:function () {
             var pageInfo = this.collection.pageInfo()
@@ -103,6 +103,10 @@
             namespace.fetchTemplate(this.template, function (tmpl) {
                 $(this.el).html(tmpl(pageInfo));
             }, this);
+
+            if (pageInfo.perPage - this.collection.length >= 2 )
+            { $('#main').addClass('not-full') }
+            else { $('#main').removeClass('not-full') }
 
             $('#main').empty()
             var Quotes = namespace.module('Quotes')

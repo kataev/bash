@@ -41,7 +41,7 @@
             <ul class="nav">
                 {#                <li><a href="#about">О нас</a></li>#}
                 {% if user.is_authenticated %}
-                    <li><a href="#" data-controls-modal="add-modal" data-keyboard="true">Добавить</a></li>
+                    <li><a href="/add" data-controls-modal="add-modal" data-keyboard="true">Добавить</a></li>
                 {% endif %}
             </ul>
             <ul class="nav secondary-nav">
@@ -67,7 +67,7 @@
 
 <div class="container span12">
     <div class='hide modal' id="add-modal">
-        <form style='margin: 0' action="#add" method="POST">
+        <form  id="add" style='margin: 0' action="/add" method="POST">
             <div class="modal-header">
                 <a href="#" class="close">&times;</a>
                 <h3>Добавить цитату</h3>

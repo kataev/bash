@@ -1,12 +1,14 @@
     <img src="https://si0.twimg.com/a/1326828287/images/logos/twitter_newbird_blue.png">
-    <div data-user-id='<%= author.social_auth.uid %>' class='span2'>
-        <p class='id'><a href='/quote/<%= id %>'>#<%= id %></a> <%= author.username %></p>
+    <div class='info span2'>
+        <p class='id'><a href='/quote/<%= id %>'>#<%= id %></a> <a class='status' rel='twipsy' title='Twitter status' data-bypass><%= author.username %></a></p>
+        <p>Share on Twitter</p>
         <p class='voting'><button class="plus label success">+</button>
             <button class="count label notice">0</button>
             <button class="minus label important">-</button>
         </p>
+
     </div>
-    <div class="span8 text"><%= text %></div>
+    <blockquote class="span8 text"><p><%= text %></p></blockquote>
     <div class="row">
         <div class="voting span2">
             

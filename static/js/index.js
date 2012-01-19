@@ -25,15 +25,20 @@ this.namespace = {
     //
     // Delete if you are using a different template loading method.
     fetchTemplate:function (path, done, context) {
+        window.JST = window.JST || {};
+
         // Should be an instant synchronous way of getting the template, if it
         // exists in the JST object.
-        if (this.JST && this.JST[path]) {
-            return done.call(context, this.JST[path]);
+        if (JST[path]) {
+            return done.call(context, JST[path]);
         }
 
         // Fetch it asynchronously if not available from JST
         return $.get(path, function (contents) {
-            done.call(context,_.template(contents));
+            var tmpl = _.template(contents);
+            JST[path] = tmpl;
+
+            done.call(context,tmpl);
         });
     },
 
@@ -98,7 +103,6 @@ jQuery(function ($) {
             // that may be placed in modules.  To have this work globally (at the
             // cost of losing all route events) you can change the following line
             // to: Backbone.history.navigate(href, true);
-            console.log(href)
             app.router.navigate(href, true);
         }
     });

@@ -70,28 +70,29 @@
             $(this.el).attr('id', 'quote_' + this.model.get('id'));
             namespace.fetchTemplate(this.template, function (tmpl) {
                 $(this.el).html(tmpl(this.model.toJSON()));
-                this.add_vote(this.model.get('vote_set'))
+                this.votes(this.model.get('vote_set'))
+                this.author_change()
+                this.$('[rel=twipsy]').twipsy()
             }, this);
         },
         author_change:function(user){
             var m = this.author.toJSON();
             if (_.isArray(m) ) { m = m[0]}
-            console.log(m)
             this.$('img').attr('src',m.profile_image_url)
+                if (m.status){
+            this.$('.status').attr('title',m.status.text || 'Twitter status')
+                }
         },
         vote:function (e) {
             var url = '/quote/' + this.model.get('id');
-            if ($(e.target).hasClass('plus')) {
-                url += '/plus'
-            }
-            else {
-                url += '/minus'
-            }
-            $.ajax({url:url, type:'POST', context:this}).success(this.add_vote).error(function (err) {
-                this.$('.voting').html("Дык харе")
+            if ($(e.target).hasClass('plus')) { url += '/plus' }
+            else { url += '/minus' }
+            $.ajax({url:url, type:'POST', context:this}).success(this.votes).error(function (err) {
+                this.$('.plus,.minus').attr('disabled','disabled')
             })
         },
-        add_vote:function (data) {
+        votes:function (data) {
+            if (!data.length) { return }
             var v = _(data).reduce(function (memo, vote) {
                 memo[vote.vote ? 'plus' : 'minus'].push(vote.user.username);
                 return memo
