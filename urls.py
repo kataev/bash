@@ -8,7 +8,6 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^$', 'bash.views.home', name='home'),
     url(r'^page/(?P<page>\d+)$', 'bash.views.home', name='home'),
-    url(r'^add$', 'bash.views.add', name='add'),
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'', include('social_auth.urls')),

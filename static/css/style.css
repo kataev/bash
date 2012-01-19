@@ -65,6 +65,10 @@ body {
     background: url(/static/img/twitter_by_boogalabee.png) 50% 100% no-repeat;
 }
 
+.topbar img {
+    height: 16px; vertical-align: middle;
+}
+
 .quote {
     margin: 10px;
 }

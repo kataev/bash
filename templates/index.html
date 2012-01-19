@@ -11,6 +11,50 @@
         <script src="/static/js/libs/underscore.js"></script>
         <script src="/static/js/libs/backbone.js"></script>
 
+    <!-- Templates -->
+    <script type="text/template" id="quote-template">
+        <img src="https://si0.twimg.com/a/1326828287/images/logos/twitter_newbird_blue.png">
+        <div class='info span2'>
+            <p class='id'><a href='/quote/<%= id %>'>#<%= id %></a> <a class='status' rel='twipsy' title='Twitter status' data-bypass><%= author.username %></a></p>
+{#            <p> </p>#}
+            <p class='voting'><button class="plus label success">+</button>
+                <button class="count label notice">0</button>
+                <button class="minus label important">-</button>
+            </p>
+        </div>
+        <blockquote class="span8 text"><p><%= text %></p></blockquote>
+        <div class="row">
+            <div class="voting span2">
+            </div>
+        </div>
+    </script>
+
+    <script type="text/template" id="pagination-template">
+        <% if(pages > 1) { %>
+        <% if (!prev) { %>
+        <li class="prev disabled">
+            <a href="">&larr; Предыдущая</a>
+        </li >
+        <% } else { %>
+        <li class="prev">
+            <a href="/page/<%= prev %>" >&larr; Предыдущая</a>
+        </li >
+        <% } %>
+        <li class="active">
+            <a href="#" >Страница <%= page %> из <%= pages %></a>
+        </li>
+        <% if (!next) { %>
+        <li class="next disabled">
+            <a href="">Следующяя  &rarr;</a>
+        </li >
+        <% } else { %>
+        <li class="next">
+            <a href="/page/<%= next %>" >Следующяя  &rarr;</a>
+        </li >
+        <% } %>
+        <% } %>
+    </script>
+
     <!-- Application -->
         <script src="/static/js/index.js"></script>
         <script src="/static/js/modules/users.js"></script>
@@ -23,12 +67,10 @@
     <script src="/static/js/bootstrap/bootstrap-dropdown.js"></script>
     <script src="/static/js/bootstrap/bootstrap-twipsy.js"></script>
 
-    {#    <script src="/quote?callback=collection"></script>#}
-
-
     <!-- Le styles -->
     <link href="/static/css/bootstrap.css" rel="stylesheet">
     <link href="/static/css/style.css" rel="stylesheet">
+
 
 </head>
 
@@ -41,7 +83,10 @@
             <ul class="nav">
                 {#                <li><a href="#about">О нас</a></li>#}
                 {% if user.is_authenticated %}
-                    <li><a href="/add" data-controls-modal="add-modal" data-keyboard="true">Добавить</a></li>
+                    <li>
+
+                        <a href="" id='add_modal' data-controls-modal="add-modal" data-keyboard="true"><img src='/static/img/001.png'> Добавить</a>
+                    </li>
                 {% endif %}
             </ul>
             <ul class="nav secondary-nav">
@@ -50,16 +95,17 @@
                     {% for type, accounts in social_auth.associated.items %}
                         {% for account in accounts %}
                             <li>
-                                <a><img style='height: 16px; vertical-align: middle;'
-                                                 src="/static/img/{{ account.provider }}.png"> {{ user.username }}
+                                <a><img src="/static/img/{{ account.provider }}.png"> {{ user.username }}
                                 </a>
                             </li>
                         {% endfor %}
                     {% endfor %}
                 {% else %}
-                    <li><a data-bypass href="{% url socialauth_begin 'twitter' %}">Вход через <b>Twitter</b></a></li>
+                    <li>
+                        <a data-bypass href="{% url socialauth_begin 'twitter' %}">Вход через <b>Twitter</b></a></li>
                     </li>
                 {% endif %}
+
             </ul>
         </div>
     </div>
@@ -67,13 +113,14 @@
 
 <div class="container span12">
     <div class='hide modal' id="add-modal">
-        <form  id="add" style='margin: 0' action="/add" method="POST">
+        <form id="add" style='margin: 0' action="/add" method="POST">
             <div class="modal-header">
                 <a href="#" class="close">&times;</a>
                 <h3>Добавить цитату</h3>
             </div>
             <div class="modal-body">
                 <textarea style='width: 98%;' placeholder="Вставьте цитату" name='text'></textarea>
+                <span class='help-block'><span class='label notice'>Замечание:</span> Цитата будет доступна после проверки модератором.</span>
             </div>
             <div class="modal-footer">
                 {% csrf_token %}

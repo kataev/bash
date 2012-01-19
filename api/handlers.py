@@ -7,7 +7,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import redirect
 
 class QuoteHandler(BaseHandler):
-    allowed_methods = ('GET','POST')
+#    allowed_methods = ('GET','POST')
     model = Quote
     fields = ('id', 'text', 'vote_set', ('author', ('username', ('social_auth', ('uid',)))))
 
@@ -15,17 +15,19 @@ class QuoteHandler(BaseHandler):
         if not self.has_model():
             return rc.NOT_IMPLEMENTED
 
-        if not request.user.is_active():
+        if not request.user.is_active:
             return rc.FORBIDDEN
 
-        attrs = self.flatten_dict(request.data)
+        try:
+            text = request.POST.get('text')
+        except KeyError:
+            return rc.BAD_REQUEST
 
         try:
-            inst = self.queryset(request).get(**attrs)
+            inst = self.queryset(request).get(author=request.user,text=text)
             return rc.DUPLICATE_ENTRY
         except self.model.DoesNotExist:
-            attrs['author'] = request.user
-            inst = self.model(**attrs)
+            inst = self.model(author=request.user,text=text)
             inst.save()
             return inst
         except self.model.MultipleObjectsReturned:
@@ -36,6 +38,7 @@ class QuoteHandler(BaseHandler):
             return rc.NOT_IMPLEMENTED
 
         pkfield = self.model._meta.pk.name
+        print 'read'
 
         if pkfield in kwargs:
             try:

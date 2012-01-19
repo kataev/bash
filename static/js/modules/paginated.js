@@ -90,9 +90,10 @@
             _.bindAll(this, 'previous', 'next', 'render');
             this.collection.bind('refresh', this.render);
             this.collection.bind('reset', this.render);
+            this.collection.view = this;
         },
 
-        template:"/static/js/templates/pagination.html",
+        template:_.template($('#pagination-template').html()),
         events:{
             'click .prev:not(.disabled) a':'previous',
             'click .next:not(.disabled) a':'next'
@@ -100,20 +101,21 @@
         render:function () {
             var pageInfo = this.collection.pageInfo()
             Backbone.history.navigate('/page/' + pageInfo.page, true)
-            namespace.fetchTemplate(this.template, function (tmpl) {
-                $(this.el).html(tmpl(pageInfo));
-            }, this);
+            $(this.el).html(this.template(pageInfo));
 
-            if (pageInfo.perPage - this.collection.length >= 2 )
-            { $('#main').addClass('not-full') }
-            else { $('#main').removeClass('not-full') }
+            if (pageInfo.perPage - this.collection.length >= 2) {
+                $('#main').addClass('not-full')
+            }
+            else {
+                $('#main').removeClass('not-full')
+            }
 
             $('#main').empty()
             var Quotes = namespace.module('Quotes')
 
             this.collection.each(function (quote) {
                 var view = new Quotes.Views.Quote({model:quote})
-                    view.render()
+                view.render()
                 $('#main').append(view.el);
                 this.bind('change_page', view.remove, view)
             }, this);
@@ -128,6 +130,13 @@
         next:function () {
             this.trigger("change_page");
             this.collection.nextPage();
+            return false;
+        },
+
+        set_page:function (page) {
+            this.trigger("change_page");
+            this.collection.page = page;
+            this.collection.fetch();
             return false;
         }
     });

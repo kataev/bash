@@ -60,6 +60,7 @@
       .delegate('.close', 'click.modal', $.proxy(this.hide, this))
 
     if ( this.settings.show ) {
+
       this.show()
     }
 
@@ -210,7 +211,6 @@
 
   $.fn.modal = function ( options ) {
     var modal = this.data('modal')
-
     if (!modal) {
 
       if (typeof options == 'string') {

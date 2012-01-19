@@ -38,7 +38,7 @@ this.namespace = {
             var tmpl = _.template(contents);
             JST[path] = tmpl;
 
-            done.call(context,tmpl);
+            done.call(context, tmpl);
         });
     },
 
@@ -59,16 +59,12 @@ jQuery(function ($) {
 
     // Defining the application router, you can attach sub routers here.
     var Router = Backbone.Router.extend({
-        initialize:function () {
-            this.quote = new Quote.Router("quote/");
-        },
         routes:{
             "":"index",
             ":hash":"index"
         },
-
         index:function (hash) {
-            console.log(hash)
+
         }
     });
 
@@ -79,11 +75,23 @@ jQuery(function ($) {
     // Trigger the initial route and enable HTML5 History API support
     Backbone.history.start({ pushState:true });
 
-    app.Collection = new Paginated.Collection({baseUrl:'/quotes',model:Quotes.Model,page:window.location.href.split('page/')[1]});
+    app.Collection = new Paginated.Collection({baseUrl:'/quotes', model:Quotes.Model, page:window.location.href.split('page/')[1]});
     app.Collection.fetch()
 
-    app.View = new Paginated.Views.View({collection:app.Collection,el:$('#navigation')});
+    app.View = new Paginated.Views.View({collection:app.Collection, el:$('#navigation')});
 //    app.View.render()
+
+
+    $('#add button.btn.primary').bind('click', function (e) {
+        e.preventDefault();
+        var text = $('#add textarea').val()
+
+        $.ajax({url:'/quote', type:'POST', context:this, data:{text:text}})
+            .success(function (data) {
+                $('#add-modal').modal('hide')
+                $('#add textarea').val('')
+            })
+    });
 
     // All navigation that is relative should be passed through the navigate
     // method, to be processed by the router.  If the link has a data-bypass
@@ -109,6 +117,6 @@ jQuery(function ($) {
 });
 
 
-function collection (data){
+function collection(data) {
     namespace.module("Quotes").quotes.reset(data);
 }
