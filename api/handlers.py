@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 __author__ = 'bteam'
 from piston.handler import BaseHandler
-from quotes.models import Quote,Vote
+from bash.quotes.models import Quote,Vote
 from piston.utils import rc
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import redirect

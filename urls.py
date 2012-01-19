@@ -11,7 +11,7 @@ urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'', include('social_auth.urls')),
-    url(r'', include('api.urls')),
+    url(r'', include('bash.api.urls')),
 
 )
 
