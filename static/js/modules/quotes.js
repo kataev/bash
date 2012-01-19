@@ -36,9 +36,11 @@
             var user_id = this.model.get('author').social_auth[0].uid
             this.author = Users.get({id:user_id})
             if (!this.author) {
-                this.author = Users.add({id:user_id});
+                Users.add({id:user_id});
+		this.author = Users.get({id:user_id})
             }
             this.author.bind('change', this.author_change, this);
+	    user_id = null;
         },
         render:function () {
             $(this.el).attr('id', 'quote_' + this.model.get('id'));
