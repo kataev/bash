@@ -81,6 +81,7 @@ jQuery(function ($) {
     app.View = new Paginated.Views.View({collection:app.Collection, el:$('#navigation')});
 //    app.View.render()
 
+    var alert_template = _.template($('#alert-template').html())
 
     $('#add button.btn.primary').bind('click', function (e) {
         e.preventDefault();
@@ -90,6 +91,10 @@ jQuery(function ($) {
             .success(function (data) {
                 $('#add-modal').modal('hide')
                 $('#add textarea').val('')
+                var node = $(alert_template(data))
+                    $('.close',node).click(function(e){$(node).remove()});
+                $('#main').prepend(node)
+
             })
     });
 
@@ -99,6 +104,7 @@ jQuery(function ($) {
     $(document).on("click", "a:not([data-bypass])", function (evt) {
         // Get the anchor href and protcol
         var href = $(this).attr("href");
+        if (!href) {return}
         var protocol = this.protocol + "//";
 
         // Ensure the protocol is not part of URL, meaning its relative.

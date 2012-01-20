@@ -6,6 +6,11 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
+    <link rel="shortcut icon" type="image/x-icon" href="/static/img/twitter.png">
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+
+
     <!-- Libraries -->
     <script src="/static/js/libs/jquery.js"></script>
         <script src="/static/js/libs/underscore.js"></script>
@@ -55,6 +60,17 @@
         <% } %>
     </script>
 
+
+        <script type="text/template" id="alert-template">
+            <div class="alert-message success">
+                <a class="close">×</a>
+                <p>
+                    <strong>Так держать</strong> Вы успешно добавили цитату под номером <%= id %>.
+                </p>
+            </div>
+        </script>
+
+
     <!-- Application -->
         <script src="/static/js/index.js"></script>
         <script src="/static/js/modules/users.js"></script>
@@ -67,9 +83,7 @@
     <script src="/static/js/bootstrap/bootstrap-dropdown.js"></script>
     <script src="/static/js/bootstrap/bootstrap-twipsy.js"></script>
 
-    <!-- Le styles -->
-    <link href="/static/css/bootstrap.css" rel="stylesheet">
-    <link href="/static/css/style.css" rel="stylesheet">
+
 
 
 </head>

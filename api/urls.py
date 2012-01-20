@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 __author__ = 'bteam'
-__author__ = 'bteam'
 from django.conf.urls.defaults import *
 from piston.resource import Resource
 from handlers import *
