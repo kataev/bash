@@ -6,7 +6,7 @@ class Quote(models.Model):
     text = models.TextField(u'Текст цитаты',max_length=300)
     author = models.ForeignKey(User,verbose_name=u'Постер')
     accepted = models.BooleanField(u'Утверждена',default=False)
-#    date = models.DateField(u'Дата добаления',auto_now=True)
+#    date = models.DateField(u'Дата добаления',auto_now_add=True)
 
     def __unicode__(self):
         return  u'Цитата "%s" от %s' % ( self.text,self.author.username)

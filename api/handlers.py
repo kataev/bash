@@ -5,6 +5,7 @@ from bash.quotes.models import Quote,Vote
 from piston.utils import rc
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import redirect
+from bash.views import success
 
 class QuoteHandler(BaseHandler):
 #    allowed_methods = ('GET','POST')
@@ -29,7 +30,10 @@ class QuoteHandler(BaseHandler):
         except self.model.DoesNotExist:
             inst = self.model(author=request.user,text=text)
             inst.save()
-            return inst
+            if request.is_ajax():
+                return inst
+            else:
+                return success(request,inst)
         except self.model.MultipleObjectsReturned:
             return rc.DUPLICATE_ENTRY
 

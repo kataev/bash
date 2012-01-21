@@ -50,20 +50,55 @@ this.namespace = {
 // Inside this function, kick-off all initialization, everything up to this
 // point should be definitions.
 jQuery(function ($) {
-
-    // Shorthand the application namespace
     var app = namespace.app;
 
-    // Include the example module
-    var Quote = namespace.module("Quotes");
+
+    var alert = $('#alert-message')
+    $('.close',alert).click(function(e){$(alert).addClass('hide')});
+    
+    
+    var m = $('#add-modal')
+    $('.close',m).click(function(e){
+        $(m).addClass('hide');
+        app.router.navigate('/',true)
+    })
+    $('button',m).click(function(e){
+        e.preventDefault()
+        $.ajax({url:$('form',m).attr('action'),dataType:'json',type:'POST',data:{text:$('textarea',m).val(),
+            'csrfmiddlewaretoken':$('[name=csrfmiddlewaretoken]',m).val()}})
+            .success(function(data){
+                if (!data.errors){
+                    $(m).addClass('hide');
+                    $('.pk',alert).html(data.pk)
+                    $(alert).removeClass('hide')
+                    app.router.navigate('/',true)
+                    $('textarea',m).val('')
+                }
+                else {
+                    $('.modal-body',m).append('<span class="label important">Ошибка: '+ data.errors.text[0]+'</span>')
+                }
+            })
+
+    })
 
     // Defining the application router, you can attach sub routers here.
     var Router = Backbone.Router.extend({
         routes:{
+            "/":"index",
             "":"index",
-            ":hash":"index"
+            ":hash":"index",
+            "/page/:page":"setPage",
+            "/add":'add'
         },
         index:function (hash) {
+            if (!hash && app.Collection.page!=1) app.Collection.setPage(1);
+        },
+        setPage:function(page){
+            app.Collection.setPage(page);
+        },
+        add:function(){
+            console.log('add')
+            $(m).removeClass('hide')
 
         }
     });
@@ -71,32 +106,8 @@ jQuery(function ($) {
     // Define your master router on the application namespace and trigger all
     // navigation from this instance.
     app.router = new Router();
-
     // Trigger the initial route and enable HTML5 History API support
     Backbone.history.start({ pushState:true });
-
-    app.Collection = new Paginated.Collection({baseUrl:'/quotes', model:Quotes.Model, page:window.location.href.split('page/')[1]});
-    app.Collection.fetch()
-
-    app.View = new Paginated.Views.View({collection:app.Collection, el:$('#navigation')});
-//    app.View.render()
-
-    var alert_template = _.template($('#alert-template').html())
-
-    $('#add button.btn.primary').bind('click', function (e) {
-        e.preventDefault();
-        var text = $('#add textarea').val()
-
-        $.ajax({url:'/quote', type:'POST', context:this, data:{text:text}})
-            .success(function (data) {
-                $('#add-modal').modal('hide')
-                $('#add textarea').val('')
-                var node = $(alert_template(data))
-                    $('.close',node).click(function(e){$(node).remove()});
-                $('#main').prepend(node)
-
-            })
-    });
 
     // All navigation that is relative should be passed through the navigate
     // method, to be processed by the router.  If the link has a data-bypass
@@ -104,15 +115,14 @@ jQuery(function ($) {
     $(document).on("click", "a:not([data-bypass])", function (evt) {
         // Get the anchor href and protcol
         var href = $(this).attr("href");
-        if (!href) {return}
         var protocol = this.protocol + "//";
-
         // Ensure the protocol is not part of URL, meaning its relative.
         if (href.slice(protocol.length) !== protocol) {
             // Stop the default event to ensure the link will not cause a page
             // refresh.
             evt.preventDefault();
 
+            if (href===undefined) {return}
             // This uses the default router defined above, and not any routers
             // that may be placed in modules.  To have this work globally (at the
             // cost of losing all route events) you can change the following line
@@ -121,8 +131,3 @@ jQuery(function ($) {
         }
     });
 });
-
-
-function collection(data) {
-    namespace.module("Quotes").quotes.reset(data);
-}

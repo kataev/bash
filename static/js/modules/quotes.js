@@ -15,14 +15,7 @@
 //
 (function (Quotes) {
 
-    Quotes.Model = Backbone.Model.extend({
-        urlRoot:'/quote',
-        url:function () {
-            var base = this.urlRoot;
-            if (this.isNew()) return base;
-            return base + (base.charAt(base.length - 1) == '/' ? '' : '/') + encodeURIComponent(this.id);
-        }
-    });
+    Quotes.Model = Backbone.Model.extend({ });
 
     Quotes.Views.Quote = Backbone.View.extend({
         template:_.template($('#quote-template').html()),
@@ -33,7 +26,7 @@
             'click .minus':'vote'
         },
         initialize:function (args) {
-            var user_id = this.model.get('author').social_auth[0].uid
+            var user_id = this.model.get('author').social_auth[0].uid;
             this.author = Users.get({id:user_id})
             if (!this.author) {
                 this.author = Users.add({id:user_id});
@@ -105,8 +98,6 @@
 
     });
 
-
     window.Quotes = Quotes;
-
 
 })(namespace.module("Quotes"));

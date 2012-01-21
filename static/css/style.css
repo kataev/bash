@@ -57,8 +57,12 @@ body {
 .pagination.center { left: 50%; }
 .pagination.center ul { left: -50%; }
 
-.topbar div {
+.topbar {
     background: url(/static/img/nami.png) !important;
+}
+
+.topbar .fill {
+    background: none !important;
 }
 
 #main.not-full {
@@ -95,6 +99,10 @@ body {
 
 #main {
     min-height: 440px;
+}
+
+#add textarea {
+    width: 98%;
 }
 
 .quote p {padding: 0;margin: 0}
