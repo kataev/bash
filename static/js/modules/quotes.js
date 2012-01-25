@@ -14,8 +14,11 @@
 // Line 18: Project.Model = Backbone.Model.extend({
 //
 (function (Quotes) {
+    var monthNamesShort = ['Янв','Фев','Мар','Апр','Май','Июн', 'Июл', 'Авг','Сен','Окт','Ноя','Дек']
 
-    Quotes.Model = Backbone.Model.extend({ });
+    Quotes.Model = Backbone.Model.extend({
+        urlRoot:'/quote'
+    });
 
     Quotes.Views.Quote = Backbone.View.extend({
         template:_.template($('#quote-template').html()),
@@ -35,7 +38,11 @@
         },
         render:function () {
             $(this.el).attr('id', 'quote_' + this.model.get('id'));
-            $(this.el).html(this.template(this.model.toJSON()));
+            var data = this.model.toJSON();
+            var d = new Date(data.datetime);
+            var m = monthNamesShort[d.getMonth()]+'. ' + d.getDate() + ', ' + d.getFullYear();
+            data.datetime = m
+            $(this.el).html(this.template(data));
             this.votes(this.model.get('vote_set'))
             this.author_change()
             this.$('[rel=twipsy]').twipsy()

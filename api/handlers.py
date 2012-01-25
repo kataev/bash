@@ -10,7 +10,7 @@ from bash.views import success
 class QuoteHandler(BaseHandler):
 #    allowed_methods = ('GET','POST')
     model = Quote
-    fields = ('id', 'text', 'vote_set', ('author', ('username', ('social_auth', ('uid',)))))
+    fields = ('id', 'text', 'datetime', 'vote_set', ('author', ('username', ('social_auth', ('uid',)))))
 
     def create(self, request, *args, **kwargs):
         if not self.has_model():

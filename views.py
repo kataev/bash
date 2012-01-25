@@ -3,6 +3,7 @@ __author__ = 'bteam'
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.shortcuts import get_object_or_404
 from bash.quotes.models import *
 
 from django import forms
@@ -13,7 +14,16 @@ class QuoteForm(forms.Form):
 
 
 def home(request,page=1):
-    return render(request,'index.html',dict(page=page))
+    paginator = Paginator(Quote.objects.filter(accepted=True), 7)
+
+    try:
+        quotes = paginator.page(page)
+    except PageNotAnInteger:
+        quotes = paginator.page(1)
+    except EmptyPage:
+        quotes = paginator.page(paginator.num_pages)
+
+    return render(request,'index.html',dict(page=page,quotes=quotes))
 
 def add(request):
     if request.method == 'POST' and request.user.is_authenticated():
@@ -38,3 +48,8 @@ def add(request):
 
 def success(request,quote=None):
     return render(request,'index.html',dict(page=1,quote=quote))
+
+
+def quote(request,id):
+    quote = get_object_or_404(Quote,pk=id)
+    return render(request,'qoute.html',dict(quote=quote))

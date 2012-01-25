@@ -14,19 +14,18 @@
     <!-- Templates -->
     <script type="text/template" id="quote-template">
         <img src="https://si0.twimg.com/a/1326828287/images/logos/twitter_newbird_blue.png">
-        <div class='info span2'>
-            <p class='id'><a href='/quote/<%= id %>'>#<%= id %></a> <a class='status' rel='twipsy' title='Twitter status' data-bypass><%= author.username %></a></p>
-            {#            <p> </p>#}
-            <p class='voting'><button class="plus label success">+</button>
+        <div class='span2'>
+            <div class="info"><a href='/<%= id %>'>#<%= id %></a>
+                <button class="plus label success">+</button>
                 <button class="count label notice">0</button>
                 <button class="minus label important">-</button>
-            </p>
+                </div>
+
+                <a rel='twipsy' title='Twitter status' data-bypass>@<%= author.username %></a>
+            <span title='Время добавления' class="label"><%= datetime %></span>
+
         </div>
-        <blockquote class="span8 text"><p><%= text %></p></blockquote>
-        <div class="row">
-            <div class="voting span2">
-            </div>
-        </div>
+        <pre class="span9"><%= text %></pre>
     </script>
 
     <script type="text/template" id="pagination-template">
@@ -55,8 +54,8 @@
         <% } %>
     </script>
 </head>
-<body>
-
+<body class='no-js'>
+<script>document.body.className = document.body.className.replace("no-js","");</script>
 <div class="topbar">
     <div class="fill">
         <div class="container span12">
@@ -102,7 +101,7 @@
             </div>
             <div class="modal-footer">
                 {% csrf_token %}
-                <span class="help-block" style='float:left;'><span class="label notice">Замечание:</span> Цитата будет доступна после проверки модератором.</span>
+                <span class="help-block label notice" style='float:left;'>Цитата будет доступна после проверки Неизвестными Отцами.</span>
                 <button class="btn primary">Добавить</button>
             </div>
         </form>
@@ -113,7 +112,10 @@
             <a data-bypass class="close">×</a>
             <p><strong>Так держать! </strong>Вы успешно добавили цитату под номером <span class='pk'>{{ pk }}</span>.</p>
         </div>
-        <div id="main"></div>
+        <div id="main">
+            {% block content %}
+            {% endblock %}
+        </div>
     </div>
     <footer style="margin: 0;padding: 0">
         <div class="pagination center">
@@ -131,7 +133,7 @@
 <script src="/static/js/libs/backbone.js"></script>
 
 <!-- Modules -->
-{#<script src="/static/js/bootstrap/bootstrap-modal.js"></script>#}
+<script src="/static/js/bootstrap/bootstrap-modal.js"></script>
 <script src="/static/js/bootstrap/bootstrap-dropdown.js"></script>
 <script src="/static/js/bootstrap/bootstrap-twipsy.js"></script>
 
@@ -143,6 +145,8 @@
 <script src="/static/js/modules/app.js"></script>
 
 <!-- Bootstrap -->
+{% block bootstrap %}
 <script src="/quote?callback=bootstrap&page={{ page|default:1 }}&perPage=7"></script>
+{% endblock %}
 </body>
 </html>

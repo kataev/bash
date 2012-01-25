@@ -3,13 +3,16 @@ html, body {
     /*background-color: #eee;*/
     background-image: url(/static/img/groovepaper.png);
 }
+
 body {
     padding-top: 40px; /* 40px to make the container go all the way to the bottom of the topbar */
 
 }
+
 .container > footer p {
     text-align: center; /* center align it with the container */
 }
+
 /* The white background content wrapper */
 .content {
     background-color: #fff;
@@ -19,9 +22,9 @@ body {
     -webkit-border-radius: 0 0 6px 6px;
     -moz-border-radius: 0 0 6px 6px;
     border-radius: 0 0 6px 6px;
-    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
-    -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
-    box-shadow: 0 1px 2px rgba(0,0,0,.15);
+    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .15);
+    -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, .15);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .15);
 }
 
 /* Page header tweaks */
@@ -37,6 +40,7 @@ body {
 .content .span4 {
     min-height: 500px;
 }
+
 /* Give a quick and non-cross-browser friendly divider */
 .content .span4 {
     margin-left: 0;
@@ -48,14 +52,19 @@ body {
     border: 0;
 }
 
-
 .pagination.center,
 .pagination.center ul {
     float: left;
     position: relative;
 }
-.pagination.center { left: 50%; }
-.pagination.center ul { left: -50%; }
+
+.pagination.center {
+    left: 50%;
+}
+
+.pagination.center ul {
+    left: -50%;
+}
 
 .topbar {
     background: url(/static/img/nami.png) !important;
@@ -65,17 +74,42 @@ body {
     background: none !important;
 }
 
-#main.not-full {
-    background: url(/static/img/twitter_by_boogalabee.png) 50% 100% no-repeat;
+#add textarea {
+    width: 98%;
 }
 
 .topbar img {
-    height: 16px; vertical-align: middle;
+    height: 16px;
+    vertical-align: middle;
+}
+
+.quote pre {
+    background: none;
+    padding-right: 0;
+}
+
+.quote.active pre {
+    background: #46A546
+}
+
+
+.quote .info a {
+    font-size: 120%;
+    vertical-align: middle;
+}
+
+.quote pre {
+    margin: 0 !important;
 }
 
 .quote {
     margin: 10px;
+    padding: 2px;
+    padding-top: 4px;
+    border: 1px #ffffff dashed;
+    border-radius: 3px;
 }
+
 .quote blockquote {
     margin: 0 !important;
     min-height: 50px;
@@ -86,27 +120,13 @@ body {
     margin-top: -5px !important;
 }
 
-.quote img{
+.quote img {
     height: 50px;
     width: 50px;
+    float: left;
 }
 
-.username {
-    vertical-align: top;
+.quote p {
+    padding: 0;
+    margin: 0
 }
-
-.quote img {float: left;}
-
-#main {
-    min-height: 440px;
-}
-
-#add textarea {
-    width: 98%;
-}
-
-.quote p {padding: 0;margin: 0}
-
-p.plus,p.minus {text-decoration: underline;text-align: right}
-p.plus:before { content: 'За:'}
-p.minus:before { content: 'Против:'}
