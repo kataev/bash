@@ -98,8 +98,6 @@ class VoteHandler(BaseHandler):
             self.queryset(request).get(quote=quote,user=request.user)
             return []
         except self.model.DoesNotExist:
-
-            print 'olo'
             inst = self.model(quote=quote,user=request.user,vote=vote)
             inst.save()
             return redirect('/quote/%d/votes' % quote.pk)

@@ -105,7 +105,7 @@ jQuery(function ($) {
         },
         quote:function (id) {
             var quote = namespace.module('Quotes')
-            q = new quote.Model({id:id});
+            var q = new quote.Model({id:id});
             q.fetch({success:function(){
                 $('#main').empty()
                 $('#main').append('<div id="alert-message" class="alert-message info"> <p><a href="/page/1">&larr; Посмотреть остальное</a></p> </div>')

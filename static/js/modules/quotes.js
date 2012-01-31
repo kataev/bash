@@ -59,20 +59,14 @@
         },
         vote:function (e) {
             var url = '/quote/' + this.model.get('id');
-            if ($(e.target).hasClass('plus')) {
-                url += '/plus'
-            }
-            else {
-                url += '/minus'
-            }
+            if ($(e.target).hasClass('plus')) url += '/plus';
+            else url += '/minus';
             $.ajax({url:url, type:'POST', context:this}).success(this.votes).error(function (err) {
                 this.$('.plus,.minus').attr('disabled', 'disabled')
             })
         },
         votes:function (data) {
-            if (!data.length) {
-                return
-            }
+            if (!data.length) return
             var v = _(data).reduce(function (memo, vote) {
                 memo[vote.vote ? 'plus' : 'minus'].push(vote.user.username);
                 return memo
@@ -80,27 +74,15 @@
 
             _(v).each(function (a, key) {
                 var node = this.$('button.' + key)
-                var str = _(a).reduce(
-                    function (s, v) {
-                        return s += v + ', '
-                    }, '').slice(0, -2);
-                if (node.data().twipsy) {
-                    node.data().twipsy.options.fallback = str;
-                }
-                else {
-                    node.twipsy({fallback:str})
-                }
-
+                var str = _(a).reduce( function (s, v) { return s += v + ', ' }, '').slice(0, -2);
+                if (node.data().twipsy) node.data().twipsy.options.fallback = str;
+                else node.twipsy({fallback:str})
             }, this);
             var count = this.$('.count')
             count.html(v.plus.length - v.minus.length)
-            str = v.plus.length + ' : ' + v.minus.length;
-            if (count.data().twipsy) {
-                node.data().twipsy.options.fallback = str
-            }
-            else {
-                count.twipsy({fallback:str})
-            }
+            str = v.plus.length + ' : ' + v.minus.length
+            if (count.data().twipsy) node.data().twipsy.options.fallback = str
+            else count.twipsy({fallback:str})
         }
 
     });

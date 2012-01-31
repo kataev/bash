@@ -26,7 +26,4 @@
             this.bind('change_page', view.remove, view)
         }, this);
     })
-
-
-
 })(namespace.app);
